@@ -4,6 +4,8 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const RegisterSchema = Yup.object().shape({
   fullName: Yup.string().required('Full name is required'),
   idNumber: Yup.string().required('ID number is required'),
@@ -29,10 +31,8 @@ export default function Register() {
         validationSchema={RegisterSchema}
         onSubmit={async (values, { setSubmitting, setStatus, resetForm }) => {
           setStatus(null);
-          console.log('Register button clicked, values:', values); 
           try {
-            await axios.get('http://localhost:5001/test-cors');
-            await axios.post('http://localhost:5001/api/auth/register', values);
+            await axios.post(`${apiUrl}/auth/register`, values);
             setStatus({ success: 'Registration successful! Please log in.' });
             resetForm();
           } catch (error) {
@@ -41,7 +41,6 @@ export default function Register() {
                 error.response?.data?.message ||
                 'Registration failed. Please try again.',
             });
-            console.log('Registration error:', error); 
           }
           setSubmitting(false);
         }}

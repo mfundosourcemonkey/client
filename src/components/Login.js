@@ -5,6 +5,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const LoginSchema = Yup.object().shape({
   accountNumber: Yup.string().required('Account number is required'),
   password: Yup.string().required('Password is required'),
@@ -12,7 +14,7 @@ const LoginSchema = Yup.object().shape({
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth(); // <-- Move this inside the component
+  const { login } = useAuth();
 
   return (
     <div style={{ maxWidth: 400, margin: '2rem auto', textAlign: 'center' }}>
@@ -26,9 +28,8 @@ export default function Login() {
         onSubmit={async (values, { setSubmitting, setStatus }) => {
           setStatus(null);
           try {
-//            const res = await axios.post('/api/auth/login', values);
-const res = await axios.post('http://localhost:5001/api/auth/login', values);
-            login(res.data.token, res.data.user.role); // <-- Use login here
+            const res = await axios.post(`${apiUrl}/auth/login`, values);
+            login(res.data.token, res.data.user.role);
             // Redirect based on role
             if (res.data.user.role === 'staff') {
               navigate('/staff-dashboard');
