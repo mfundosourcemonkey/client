@@ -27,7 +27,7 @@ mongoose.connect(dbUri)
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3000', // Adjust as needed for production
+  origin: ['http://localhost:3000', 'https://paymentsswift.netlify.app'],
   credentials: true
 }));
 app.use(helmet());
