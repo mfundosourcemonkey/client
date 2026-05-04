@@ -31,13 +31,16 @@ app.use(cors({
   credentials: true
 }));
 
-// Universal OPTIONS handler for CORS preflight
+// Robust universal OPTIONS handler for CORS preflight
 app.use((req, res, next) => {
   if (req.method === 'OPTIONS') {
-    res.sendStatus(204);
-  } else {
-    next();
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    return res.sendStatus(204);
   }
+  next();
 });
 
 app.use(helmet());
