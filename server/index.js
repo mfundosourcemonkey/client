@@ -30,6 +30,16 @@ app.use(cors({
   origin: ['http://localhost:3000', 'https://paymentsswift.netlify.app'],
   credentials: true
 }));
+
+// Universal OPTIONS handler for CORS preflight
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(204);
+  } else {
+    next();
+  }
+});
+
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
