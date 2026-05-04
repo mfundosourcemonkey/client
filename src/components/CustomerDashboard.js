@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 const PaymentSchema = Yup.object().shape({
   amount: Yup.number().min(1, 'Amount must be positive').required('Amount is required'),
   currency: Yup.string().required('Currency is required'),
@@ -21,10 +23,9 @@ export default function CustomerDashboard() {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('token');
-//        const res = await axios.get('/api/payments/me', {
-const res = await axios.get('http://localhost:5001/api/payments/me', {
-  headers: { Authorization: `Bearer ${token}` },
-});
+        const res = await axios.get(`${apiUrl}/payments/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setPayments(res.data.payments);
       } catch (err) {
         setStatus('Failed to fetch payments');
@@ -38,14 +39,13 @@ const res = await axios.get('http://localhost:5001/api/payments/me', {
     setStatus(null);
     try {
       const token = localStorage.getItem('token');
-//      await axios.post('/api/payments', values, {
-await axios.post('http://localhost:5001/api/payments', values, {
-  headers: { Authorization: `Bearer ${token}` },
-});
+      await axios.post(`${apiUrl}/payments`, values, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setStatus({ success: 'Payment created!' });
       resetForm();
       // Refresh payments
-      const res = await axios.get('http://localhost:5001/api/payments/me', {
+      const res = await axios.get(`${apiUrl}/payments/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPayments(res.data.payments);

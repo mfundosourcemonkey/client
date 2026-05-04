@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
+const apiUrl = process.env.REACT_APP_API_URL;
+
 export default function StaffDashboard() {
   const [payments, setPayments] = useState([]);
   const [status, setStatus] = useState(null);
@@ -11,7 +13,7 @@ export default function StaffDashboard() {
     const fetchPayments = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5001/api/payments', {
+        const res = await axios.get(`${apiUrl}/payments`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setPayments(res.data.payments);
@@ -27,12 +29,12 @@ export default function StaffDashboard() {
     console.log('Verifying payment with id:', id); // Debug log
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`http://localhost:5001/api/payments/${id}/verify`, {}, {
+      await axios.patch(`${apiUrl}/payments/${id}/verify`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStatus('Payment verified!');
       // Refresh payments
-      const res = await axios.get('http://localhost:5001/api/payments', {
+      const res = await axios.get(`${apiUrl}/payments`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPayments(res.data.payments);
@@ -63,7 +65,7 @@ export default function StaffDashboard() {
         </thead>
         <tbody>
           {payments.map((p) => {
-            console.log('Payment row:', p); // Debug log
+//            console.log('Payment row:', p); // Debug log
             return (
               <tr key={p._id}>
                 <td>{p.amount}</td>
