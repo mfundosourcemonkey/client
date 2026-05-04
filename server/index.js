@@ -30,7 +30,7 @@ app.use(cors({
   origin: ['http://localhost:3000', 'https://paymentsswift.netlify.app'],
   credentials: true
 }));
-app.options('*', cors()); // Enable pre-flight for all routes
+app.options('/*', cors()); // Enable pre-flight for all routes
 app.use(helmet());
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
